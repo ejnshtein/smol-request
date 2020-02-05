@@ -3,6 +3,7 @@ import qs from 'querystring'
 import https from 'https'
 import http from 'http'
 import fs from 'fs'
+import { createUnzip } from 'zlib'
 import { cleanObject, mergeUrl, deepmerge } from './lib/index.js'
 const pkg = JSON.parse(fs.readFileSync('./package.json'))
 const nativeRequestKeys = ['protocol', 'host', 'hostname', 'family', 'port', 'localAddres', 'socketPath', 'method', 'path', 'auth', 'agent', 'createConnection', 'timeout']
@@ -42,40 +43,41 @@ export default function smolrequest (url, options = {}, formData) {
       if (requestOptions.responseType === 'headers') {
         return resolve(result)
       }
+      const stream = ['gzip', 'compress', 'deflate'].includes(res.headers['content-encoding']) && res.statusCode === 204
+        ? res.pipe(createUnzip())
+        : res
       if (requestOptions.responseType === 'stream') {
-        result.data = res
+        result.data = stream
         return resolve(result)
       }
-      res.setEncoding('utf8')
-      const reponseData = []
-      const onData = chunk => {
-        reponseData.push(chunk)
-      }
+      // stream.setEncoding('utf8')
+      const responseData = []
+      const onData = chunk => { responseData.push(requestOptions.responseType === 'buffer' ? Buffer.from(chunk) : chunk) }
       const onError = err => {
-        res.removeListener('error', onError)
-        res.removeListener('data', onData)
+        stream.removeListener('error', onError)
+        stream.removeListener('data', onData)
         reject(err)
       }
       const onClose = () => {
-        res.removeListener('error', onError)
-        res.removeListener('data', onData)
-        res.removeListener('close', onClose)
+        stream.removeListener('error', onError)
+        stream.removeListener('data', onData)
+        stream.removeListener('end', onClose)
         if (requestOptions.responseType === 'buffer') {
-          result.data = Buffer.concat(reponseData)
+          result.data = Buffer.concat(responseData)
         } else if (requestOptions.responseType === 'json') {
           try {
-            result.data = JSON.parse(reponseData)
+            result.data = JSON.parse(responseData)
           } catch (e) {
-            return reject(new Error(`JSON parsing error: ${e.message}: ${reponseData}`))
+            return reject(new Error(`JSON parsing error: ${e.message}: ${responseData}`))
           }
         } else {
-          result.data = reponseData.join('')
+          result.data = responseData.join('')
         }
         resolve(result)
       }
-      res.on('data', onData)
-      res.on('error', onError)
-      res.on('close', onClose)
+      stream.on('data', onData)
+      stream.on('error', onError)
+      stream.on('end', onClose)
     }
     const client = url.startsWith('https') ? https : http
     const req = client.request(
