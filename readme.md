@@ -6,6 +6,10 @@
 
 Small async request client for Node.js 13.5 and newer with 0 dependencies.
 
+# Install
+
+>npm i @ejnshtein/smol-request
+
 ## Usage
 
 ### JSON
