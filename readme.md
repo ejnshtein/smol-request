@@ -1,0 +1,89 @@
+# Smol Request
+
+Small async request client for Node.js 13.5 and newer with 0 dependencies.
+
+## Usage
+
+### JSON
+
+```js
+import request from 'smol-request'
+
+request('https://ghibliapi.herokuapp.com/films', { responseType: 'json' })
+  .then(({ data }) => {
+    console.log(`Studio Ghibli has ${response.data.length} movies out there!`)
+  })
+```
+
+### Text
+
+```js
+request('https://bbc.com')
+  .then(({ data }) => {
+    //  bbc page is too big to log it to console, but we can save it to the drive!
+    fs.promises.writeFile('./bbc.html', data) // we are using only Node 13.5 and newer and promises are stable here
+      .then(() => {
+        console.log('bbc page saved!')
+      })
+  })
+```
+
+### Buffer
+
+```js
+request('https://i.picsum.photos/id/1025/200/300.jpg', { responseType: 'buffer' })
+  .then(({ data }) => {
+    fs.promises.writeFile('./picture.jpg', data)
+      .then(() => {
+        console.log('picture saved!')
+      })
+  })
+```
+
+### Stream
+
+```js
+request('https://i.picsum.photos/id/1025/200/300.jpg', { responseType: 'stream' })
+  .then(({ data }) => {
+    const stream = fs.createWriteStream('./picture.jpg')
+
+    data.pipe(stream)
+
+    data.once('finish', () => {
+      console.log('picture saved!')
+    })
+  })
+```
+
+OR you can get only headers without parsing body from request using `responseType: 'headers'`
+
+
+# API
+
+`request(url[, `[options](#RequestOptions)`[, `[formData](#formData)`]]): Promise<`[Response](#RequestResult)`>`
+
+
+# Types
+
+### RequestOptions
+
+This client uses base http/https Node.js request client, so it inherits all options from it. ([Description](https://nodejs.org/api/http.html#http_http_request_url_options_callback))
+
+|Name|Type|Default|Description|
+|-|-|-|-|
+|params|`Object`|{}|URLSearchParams of request url.(Example: `{ q: 'my search query' }` becomes -> `http://myurl?q=my+search+query`)|
+|responseType|`String`|`text`|One of these values: `text`, `buffer`, `json`, `stream`, `headers` |
+
+### RequestResult
+
+|Name|Type|Description|
+|-|-|-|
+|data|`ReadableStream` \| `Object` \| `String` \| `Buffer` \| `Null` | Response data with choosen type from `responseType` .|
+|headers|Object| Response headers. |
+|status|Number| Reponse status. |
+|statusText|String| Response status text. |
+
+### formData
+
+If you are sending form data note that you can send form from [FormData](https://npmjs.com/package/form-data) using it's method `form.submit(path, err => {})`.
+This option can be Object(then it will become string) or your custom property that will be written to request body with req.write(). ( ‾ʖ̫‾)

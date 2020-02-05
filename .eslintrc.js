@@ -1,0 +1,11 @@
+module.exports = {
+  env: {
+    node: true
+  },
+  extends: [
+    'standard'
+  ],
+  parserOptions: {
+    ecmaVersion: 2017
+  }
+}
