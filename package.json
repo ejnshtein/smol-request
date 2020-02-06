@@ -1,6 +1,6 @@
 {
   "name": "@ejnshtein/smol-request",
-  "version": "1.0.3b",
+  "version": "1.0.4",
   "description": "Tiny http/https request wrapper for Node.js using ESM (13.5 and newer)",
   "main": "Request.js",
   "scripts": {},
@@ -20,6 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "form-data": "^3.0.0",
+    "node-fetch": "^2.6.0",
     "standard": "^14.3.1"
   }
 }

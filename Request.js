@@ -4,23 +4,31 @@ import https from 'https'
 import http from 'http'
 import fs from 'fs'
 import { createUnzip } from 'zlib'
-import { cleanObject, mergeUrl, deepmerge } from './lib/index.js'
+import { cleanObject, mergeUrl, deepmerge, isBlob } from './lib/index.js'
 const pkg = JSON.parse(fs.readFileSync('./package.json'))
 const nativeRequestKeys = ['protocol', 'host', 'hostname', 'family', 'port', 'localAddres', 'socketPath', 'method', 'path', 'auth', 'agent', 'createConnection', 'timeout']
 
 export default function smolrequest (url, options = {}, formData) {
-  const [data, dataIsObject] = Object.prototype.toString.call(formData) === '[object Object]' ? [qs.stringify(formData), true] : [formData, false]
+  const [body, dataIsObject] = Object.prototype.toString.call(formData) === '[object Object]' ? [qs.stringify(formData), true] : [formData, false]
   const mergedOptions = [
     {
       method: 'GET',
       responseType: 'text',
-      headers: { 'User-Agent': `smol-request/${pkg.version}` }
+      headers: {
+        'User-Agent': `smol-request/${pkg.version}`,
+        Accept: '*/*'
+      }
     }
   ]
-  if (dataIsObject && data) {
+  if (dataIsObject && body) {
     mergedOptions.push(
-      { headers: { 'Content-Length': Buffer.byteLength(data) } }
+      { headers: { 'Content-Length': Buffer.byteLength(body) } }
     )
+  }
+  if (dataIsObject && typeof body === 'string') {
+    mergedOptions.push({
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
   }
   mergedOptions.push(options)
   if (options.responseType && options.responseType === 'buffer') {
@@ -33,7 +41,21 @@ export default function smolrequest (url, options = {}, formData) {
     url = mergeUrl(url, requestOptions.params)
   }
   return new Promise((resolve, reject) => {
-    function resHandler (res) {
+    const client = url.startsWith('https') ? https : http
+    const req = client.request(
+      url,
+      cleanObject(requestOptions, nativeRequestKeys)
+    )
+    if (requestOptions.headers) {
+      Object.entries(requestOptions.headers)
+        .forEach(([name, value]) => req.setHeader(name, value))
+    }
+    const onError = err => {
+      req.removeListener('error', onError)
+      reject(err)
+    }
+    req.on('error', onError)
+    req.on('response', (res) => {
       const result = {
         data: null,
         headers: res.headers,
@@ -78,23 +100,19 @@ export default function smolrequest (url, options = {}, formData) {
       stream.on('data', onData)
       stream.on('error', onError)
       stream.on('end', onClose)
+    })
+    if (body === null) {
+      // body is null
+      req.end()
+    } else if (isBlob(body)) {
+      body.stream().pipe(req)
+    } else if (Buffer.isBuffer(body) || typeof body === 'string') {
+      // body is buffer
+      req.write(body)
+      req.end()
+    } else {
+      // body is stream
+      body.pipe(req)
     }
-    const client = url.startsWith('https') ? https : http
-    const req = client.request(
-      url,
-      cleanObject(requestOptions, nativeRequestKeys),
-      resHandler
-    )
-    if (requestOptions.headers) {
-      Object.entries(requestOptions.headers)
-        .forEach(([name, value]) => req.setHeader(name, value))
-    }
-    const onError = err => {
-      req.removeListener('error', onError)
-      reject(err)
-    }
-    req.on('error', onError)
-    if (data) { req.write(data) }
-    req.end()
   })
 }

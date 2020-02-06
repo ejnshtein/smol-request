@@ -4,7 +4,8 @@
 [![install size](https://packagephobia.now.sh/badge?p=@ejnshtein/smol-request)](https://packagephobia.now.sh/result?p=@ejnshtein/smol-request)
 [![npm downloads](https://img.shields.io/npm/dm/@ejnshtein/smol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@ejnshtein/smol-request)
 
-Small async request client for Node.js 13.5 and newer with 0 dependencies.
+Small async request client for Node.js 13.5 and newer with 0 dependencies.  
+Mostly meant to be used as an http layer for some API library.
 
 # Install
 
