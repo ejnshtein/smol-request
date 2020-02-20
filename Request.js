@@ -8,7 +8,7 @@ import { cleanObject, mergeUrl, deepmerge, isBlob } from './lib/index.js'
 const pkg = JSON.parse(fs.readFileSync('./package.json'))
 const nativeRequestKeys = ['protocol', 'host', 'hostname', 'family', 'port', 'localAddres', 'socketPath', 'method', 'path', 'auth', 'agent', 'createConnection', 'timeout']
 
-export default function smolrequest (url, options = {}, formData) {
+export default function smolrequest (url, options = {}, formData = null) {
   const [body, dataIsObject] = Object.prototype.toString.call(formData) === '[object Object]' ? [qs.stringify(formData), true] : [formData, false]
   const mergedOptions = [
     {
