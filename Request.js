@@ -88,7 +88,7 @@ export default function smolrequest (url, options = {}, formData = null) {
           result.data = Buffer.concat(responseData)
         } else if (requestOptions.responseType === 'json') {
           try {
-            result.data = JSON.parse(responseData)
+            result.data = JSON.parse(responseData.join(''))
           } catch (e) {
             return reject(new Error(`JSON parsing error: ${e.message}: ${responseData}`))
           }
