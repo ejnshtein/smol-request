@@ -64,8 +64,20 @@ request('https://i.picsum.photos/id/1025/200/300.jpg', { responseType: 'stream' 
   })
 ```
 
-OR you can get only headers without parsing body from request using `responseType: 'headers'`
+### Headers
 
+You can get only headers without parsing body from request using `responseType: 'headers'`
+
+```js
+request('https://picsum.photos/200/300', { responseType: 'headers' })
+  .then(({ headers }) => {
+    console.log('Picture location - ', headers.location)
+  })
+```
+
+# Example
+
+There are a few examples in `example` folder in the [repo](https://github.com/ejnshtein/smol-request/tree/master/example).
 
 # API
 
