@@ -1,8 +1,8 @@
 # Smol Request
 
 [![npm version](https://img.shields.io/npm/v/@ejnshtein/smol-request.svg?style=flat-square)](https://www.npmjs.org/package/@ejnshtein/smol-request)
+[![npm downloads](https://img.shields.io/npm/dm/@ejnshtein/smol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@ejnshtein/smol-request)  
 [![install size](https://packagephobia.now.sh/badge?p=@ejnshtein/smol-request)](https://packagephobia.now.sh/result?p=@ejnshtein/smol-request)
-[![npm downloads](https://img.shields.io/npm/dm/@ejnshtein/smol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@ejnshtein/smol-request)
 
 Small async request client for Node.js 13.5 and newer with 0 dependencies.  
 Mostly meant to be used as an http layer for some API library.
@@ -16,7 +16,7 @@ Mostly meant to be used as an http layer for some API library.
 ### JSON
 
 ```js
-import request from 'smol-request'
+import request from '@ejnshtein/smol-request'
 
 request('https://ghibliapi.herokuapp.com/films', { responseType: 'json' })
   .then(({ data }) => {
