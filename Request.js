@@ -42,6 +42,7 @@ export default function smolrequest (url, options = {}, formData = null) {
   }
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? https : http
+    let resolved = false
     const result = {
       data: null,
       headers: null,
@@ -61,6 +62,9 @@ export default function smolrequest (url, options = {}, formData = null) {
         .forEach(([name, value]) => req.setHeader(name, value))
     }
     function onClose () {
+      if (resolved) {
+        return
+      }
       switch (requestOptions.responseType) {
         case 'buffer': {
           result.data = Buffer.concat(result.data)
@@ -90,6 +94,7 @@ export default function smolrequest (url, options = {}, formData = null) {
       result.status = res.statusCode
       result.statusText = res.statusMessage
       if (requestOptions.responseType === 'headers') {
+        resolved = true
         return resolve(result)
       }
       const stream = ['gzip', 'compress', 'deflate'].includes(res.headers['content-encoding']) && res.statusCode === 204
@@ -97,6 +102,7 @@ export default function smolrequest (url, options = {}, formData = null) {
         : res
       if (requestOptions.responseType === 'stream') {
         result.data = stream
+        resolved = true
         return resolve(result)
       }
       // stream.setEncoding('utf8')
