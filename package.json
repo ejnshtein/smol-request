@@ -1,6 +1,6 @@
 {
   "name": "@ejnshtein/smol-request",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Tiny http/https request wrapper for Node.js using ESM (13.5 and newer)",
   "main": "Request.js",
   "scripts": {},
@@ -24,7 +24,11 @@
   "license": "MIT",
   "devDependencies": {
     "form-data": "^3.0.0",
+    "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.0",
+    "proxy-agent": "^3.1.1",
+    "proxying-agent": "^2.4.0",
+    "socks-proxy-agent": "^5.0.0",
     "standard": "^14.3.3"
   }
 }

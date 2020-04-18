@@ -6,7 +6,7 @@ import fs from 'fs'
 import { createUnzip } from 'zlib'
 import { cleanObject, mergeUrl, deepmerge, isBlob } from './lib/index.js'
 const pkg = JSON.parse(fs.readFileSync('./package.json'))
-const nativeRequestKeys = ['protocol', 'host', 'hostname', 'family', 'port', 'localAddres', 'socketPath', 'method', 'path', 'auth', 'agent', 'createConnection', 'timeout']
+const nativeRequestKeys = ['agent', 'auth', 'createConnection', 'defaultPort', 'family', 'headers', 'host', 'hostname', 'insecureHTTPParser', 'localAddress', 'lookup', 'maxHeaderSize', 'method', 'path', 'port', 'protocol', 'setHost', 'socketPath', 'timeout']
 
 export default function smolrequest (url, options = {}, formData = null) {
   const [body, dataIsObject] = Object.prototype.toString.call(formData) === '[object Object]' ? [qs.stringify(formData), true] : [formData, false]
@@ -42,26 +42,53 @@ export default function smolrequest (url, options = {}, formData = null) {
   }
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? https : http
+    const result = {
+      data: null,
+      headers: null,
+      status: null,
+      statusText: null
+    }
+    const cleanRequestOptions = cleanObject(requestOptions, nativeRequestKeys)
     const req = client.request(
       url,
-      cleanObject(requestOptions, nativeRequestKeys)
+      cleanRequestOptions
     )
+    req.on('error', onError)
+    req.on('response', onResponse)
+    req.on('close', onClose)
     if (requestOptions.headers) {
       Object.entries(requestOptions.headers)
         .forEach(([name, value]) => req.setHeader(name, value))
     }
-    const onError = err => {
+    function onClose () {
+      switch (requestOptions.responseType) {
+        case 'buffer': {
+          result.data = Buffer.concat(result.data)
+          break
+        }
+        case 'json': {
+          try {
+            result.data = JSON.parse(result.data.join(''))
+          } catch (e) {
+            return reject(new Error(`JSON parsing error: ${e.message}: ${result.data}`))
+          }
+          break
+        }
+        default: {
+          result.data = result.data.join('')
+          break
+        }
+      }
+      resolve(result)
+    }
+    function onError (err) {
       req.removeListener('error', onError)
       reject(err)
     }
-    req.on('error', onError)
-    req.on('response', (res) => {
-      const result = {
-        data: null,
-        headers: res.headers,
-        status: res.statusCode,
-        statusText: res.statusMessage
-      }
+    function onResponse (res) {
+      result.headers = res.headers
+      result.status = res.statusCode
+      result.statusText = res.statusMessage
       if (requestOptions.responseType === 'headers') {
         return resolve(result)
       }
@@ -80,27 +107,16 @@ export default function smolrequest (url, options = {}, formData = null) {
         stream.removeListener('data', onData)
         reject(err)
       }
-      const onClose = () => {
+      const onRequestEnd = () => {
         stream.removeListener('error', onError)
         stream.removeListener('data', onData)
-        stream.removeListener('end', onClose)
-        if (requestOptions.responseType === 'buffer') {
-          result.data = Buffer.concat(responseData)
-        } else if (requestOptions.responseType === 'json') {
-          try {
-            result.data = JSON.parse(responseData.join(''))
-          } catch (e) {
-            return reject(new Error(`JSON parsing error: ${e.message}: ${responseData}`))
-          }
-        } else {
-          result.data = responseData.join('')
-        }
-        resolve(result)
+        stream.removeListener('end', onRequestEnd)
+        result.data = responseData
       }
       stream.on('data', onData)
       stream.on('error', onError)
-      stream.on('end', onClose)
-    })
+      stream.on('end', onRequestEnd)
+    }
     if (body === null) {
       // body is null
       req.end()
