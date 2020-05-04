@@ -1,7 +1,7 @@
 {
   "name": "@ejnshtein/smol-request",
-  "version": "1.0.12b",
-  "description": "Tiny http/https request wrapper for Node.js using ESM (13.5 and newer)",
+  "version": "1.1.0",
+  "description": "Tiny http/https request wrapper for Node.js 10+ (Version  13.5 and newer supports ESM)",
   "type": "module",
   "main": "Request.cjs",
   "exports": {
@@ -21,7 +21,7 @@
     "promise"
   ],
   "engines": {
-    "node": ">=13.5"
+    "node": ">=10.20"
   },
   "typings": "./typings/index.d.ts",
   "author": "ejnshtein",
