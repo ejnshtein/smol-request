@@ -4,8 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/@ejnshtein/smol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@ejnshtein/smol-request)  
 [![install size](https://packagephobia.now.sh/badge?p=@ejnshtein/smol-request)](https://packagephobia.now.sh/result?p=@ejnshtein/smol-request)
 
-Small async request client for Node.js 10.20.x+ and newer with 0 dependencies (And ESM support for Node 13.5+).  
-Mostly meant to be used as an http layer for some API library.
+Small async request client for Node.js 10+ and newer with 0 dependencies.  
 
 # Install
 
@@ -16,12 +15,7 @@ Mostly meant to be used as an http layer for some API library.
 ### JSON
 
 ```js
-// import with esm
 import request from '@ejnshtein/smol-request'
-
-// or commonjs
-
-const request = require('@ejnshtein/smol-request')
 
 request('https://ghibliapi.herokuapp.com/films', { responseType: 'json' })
   .then(({ data }) => {
@@ -35,7 +29,7 @@ request('https://ghibliapi.herokuapp.com/films', { responseType: 'json' })
 request('https://bbc.com')
   .then(({ data }) => {
     //  bbc page is too big to log it to console, but we can save it to the drive!
-    fs.promises.writeFile('./bbc.html', data) // we are using only Node 13.5 and newer and promises are stable here
+    fs.promises.writeFile('./bbc.html', data)
       .then(() => {
         console.log('bbc page saved!')
       })

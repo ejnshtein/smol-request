@@ -1,13 +1,9 @@
 {
   "name": "@ejnshtein/smol-request",
-  "version": "1.1.0",
-  "description": "Tiny http/https request wrapper for Node.js 10+ (Version  13.5 and newer supports ESM)",
-  "type": "module",
-  "main": "Request.cjs",
-  "exports": {
-    "import": "./Request.js",
-    "require": "./Request.cjs"
-  },
+  "version": "1.1.1",
+  "description": "Tiny http/https request wrapper for Node.js 10 and newer",
+  "type": "commonjs",
+  "main": "Request.js",
   "scripts": {},
   "repository": {
     "type": "git",
