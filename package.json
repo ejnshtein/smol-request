@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/ejnshtein/smol-request"
   },
+  "private": false,
   "keywords": [
     "nodejs",
     "http",
