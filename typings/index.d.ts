@@ -17,7 +17,7 @@ export interface RequestResult {
 type Request = (
   url: string,
   options?: RequestOptions,
-  formData?: qs.ParsedUrlQueryInput
+  formData?: qs.ParsedUrlQueryInput | string
 ) => Promise<RequestResult>
 
 const request: Request
