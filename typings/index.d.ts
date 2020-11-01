@@ -4,7 +4,7 @@ import qs from 'querystring'
 
 export interface RequestOptions extends http.RequestOptions {
   params?: {
-    [x: string]: string
+    [x: string]: unknown
   }
   responseType?: 'stream' | 'text' | 'buffer' | 'json' | 'headers'
 }
