@@ -3,12 +3,14 @@ import http from 'http'
 import qs from 'querystring'
 
 export interface RequestOptions extends http.RequestOptions {
-  params?: URLSearchParams
+  params?: {
+    [x: string]: string
+  }
   responseType?: 'stream' | 'text' | 'buffer' | 'json' | 'headers'
 }
 
 export interface RequestResult {
-  data: Readable | Object | String | Buffer | Null
+  data: Readable | Object | String | Buffer | null
   headers: Headers
   status: Number
   statusText: String
@@ -20,6 +22,6 @@ type Request = (
   formData?: qs.ParsedUrlQueryInput | string
 ) => Promise<RequestResult>
 
-const request: Request
+export const request: Request
 
 export default request
