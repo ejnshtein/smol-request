@@ -1,5 +1,5 @@
 {
-  "name": "@ejnshtein/smol-request",
+  "name": "smol-request",
   "version": "2.0.1",
   "description": "Tiny http/https request wrapper for Node.js 10 and newer",
   "type": "commonjs",
