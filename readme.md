@@ -1,21 +1,21 @@
 # Smol Request
 
-[![npm version](https://img.shields.io/npm/v/@ejnshtein/smol-request.svg?style=flat-square)](https://www.npmjs.org/package/@ejnshtein/smol-request)
-[![npm downloads](https://img.shields.io/npm/dm/@ejnshtein/smol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@ejnshtein/smol-request)  
-[![install size](https://packagephobia.now.sh/badge?p=@ejnshtein/smol-request)](https://packagephobia.now.sh/result?p=@ejnshtein/smol-request)
+[![npm version](https://img.shields.io/npm/v/smol-request.svg?style=flat-square)](https://www.npmjs.org/package/smol-request)
+[![npm downloads](https://img.shields.io/npm/dmsmol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=smol-request)  
+[![install size](https://packagephobia.now.sh/badge?p=smol-request)](https://packagephobia.now.sh/result?p=smol-request)
 
 Small async request client for Node.js 10+ and newer with 0 dependencies.  
 
 # Install
 
->npm i @ejnshtein/smol-request
+>npm i smol-request
 
 ## Usage
 
 ### JSON
 
 ```js
-import request from '@ejnshtein/smol-request'
+import request from 'smol-request'
 
 request('https://ghibliapi.herokuapp.com/films', { responseType: 'json' })
   .then(({ data }) => {
