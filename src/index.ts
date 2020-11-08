@@ -40,7 +40,7 @@ export interface ResponseTypeMap<T = Record<string, unknown>> {
 
 export type ResponseType = keyof ResponseTypeMap
 
-export function smolrequest<K, T extends ResponseType = 'text'>(
+export function request<K, T extends ResponseType = 'text'>(
   url: string,
   options: http.RequestOptions & {
     params?: { [x: string]: unknown }
@@ -185,5 +185,4 @@ export function smolrequest<K, T extends ResponseType = 'text'>(
   })
 }
 
-export default smolrequest
-module.exports = smolrequest
+module.exports = request
