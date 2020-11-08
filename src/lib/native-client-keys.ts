@@ -1,0 +1,21 @@
+export const nativeClientKeys = [
+  'agent',
+  'auth',
+  'createConnection',
+  'defaultPort',
+  'family',
+  'headers',
+  'host',
+  'hostname',
+  'insecureHTTPParser',
+  'localAddress',
+  'lookup',
+  'maxHeaderSize',
+  'method',
+  'path',
+  'port',
+  'protocol',
+  'setHost',
+  'socketPath',
+  'timeout'
+]

@@ -1,0 +1,13 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "mjs"
+  ],
+  "testRegex": [
+    "(/__tests__/.*|(\\.|/))\\.[mjt]+sx?$"
+  ],
+  "testEnvironment": "node",
+  "setupFilesAfterEnv": [
+    "./jest/defaultTimeout.js"
+]
+}
