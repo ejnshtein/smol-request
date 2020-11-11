@@ -184,5 +184,3 @@ export function request<K, T extends ResponseType = 'text'>(
     }
   })
 }
-
-module.exports = request

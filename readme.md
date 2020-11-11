@@ -15,7 +15,7 @@ Small async request client for Node.js 10+ and newer with 0 dependencies.
 ### JSON
 
 ```js
-import request from 'smol-request'
+import { request }  from 'smol-request'
 
 request('https://ghibliapi.herokuapp.com/films', { responseType: 'json' })
   .then(({ data }) => {
