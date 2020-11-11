@@ -1,4 +1,4 @@
-const request = require('../dist')
+const request = require('../dist/index')
 
 describe('smolrequest', () => {
   it('should get json', async () => {
