@@ -1,7 +1,7 @@
 export function deepmerge<T = Record<string, unknown>>(
   target: T,
-  ...sources: Record<string, unknown>[]
-): T | Record<string, unknown> {
+  ...sources: T[]
+): T {
   // eslint-disable-next-line @typescript-eslint/ban-types
   const isObject = (obj: object) => obj && typeof obj === 'object'
   sources.forEach((source) =>
