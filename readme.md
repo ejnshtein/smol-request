@@ -1,7 +1,7 @@
 # Smol Request
 
 [![npm version](https://img.shields.io/npm/v/smol-request.svg?style=flat-square)](https://www.npmjs.org/package/smol-request)
-[![npm downloads](https://img.shields.io/npm/dmsmol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=smol-request)  
+[![npm downloads](https://img.shields.io/npm/smol-request.svg?style=flat-square)](http://npm-stat.com/charts.html?package=smol-request)
 [![install size](https://packagephobia.now.sh/badge?p=smol-request)](https://packagephobia.now.sh/result?p=smol-request)
 
 Small async request client for Node.js 10+ and newer with 0 dependencies.  
