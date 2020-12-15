@@ -9,6 +9,7 @@
     "build": "tsc",
     "lint": "eslint ./src --ext .ts",
     "test": "jest --config jest.json",
+    "pretest": "rm -rf dist && npm run build",
     "pb": "np"
   },
   "repository": "github:ejnshtein/smol-request",
