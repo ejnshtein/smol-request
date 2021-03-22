@@ -1,9 +1,9 @@
 // docs: https://nodejs.org/dist/latest-v10.x/docs/api/https.html#https_https_request_url_options_callback
 
-import fs from 'fs'
-import http from 'http'
-import https from 'https'
-import qs from 'querystring'
+import * as fs from 'fs'
+import * as http from 'http'
+import * as https from 'https'
+import * as qs from 'querystring'
 import { createUnzip } from 'zlib'
 import { cleanObject } from './lib/clean-object'
 import { deepmerge } from './lib/deepmerge'
