@@ -123,7 +123,9 @@ export function request<K, T extends ResponseType = 'text'>(
           break
         }
         default: {
-          result.data = result.data.join('')
+          if (result.data && Array.isArray(result.data)) {
+            result.data = result.data.join('')
+          }
           break
         }
       }
